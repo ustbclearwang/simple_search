@@ -36,9 +36,9 @@ web框架：Django1.8.18
 
 ## 项目运行
 
-- 1.修改[settings.py](https://github.com/0nise/simple_search/jianshu/jianshu/settings.py "https://github.com/0nise/simple_search/jianshu/jianshu/settings.py")文件数据库配置信息
+- 1.修改[settings.py](https://github.com/0nise/simple_search/blob/master/jianshu/jianshu/settings.py "https://github.com/0nise/simple_search/blob/master/jianshu/jianshu/settings.py")文件数据库配置信息
 
-- 2.运行[manage.py](https://github.com/0nise/simple_search/jianshu/manage.py "https://github.com/0nise/simple_search/jianshu/manage.py") runserver 0.0.0.0:8000
+- 2.运行[manage.py](https://github.com/0nise/simple_search/blob/master/jianshu/manage.py "https://github.com/0nise/simple_search/blob/master/jianshu/manage.py") runserver 0.0.0.0:8000
 
 - 3.打开浏览器访问 http://localhost:8080/search/index/
 
