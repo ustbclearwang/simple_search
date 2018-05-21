@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>搜索</title>
+  <link rel="stylesheet" href="/static/layui/css/layui.css">
+  <script src="/static/layui/layui.all.js"></script>
+  <script src="/static/js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+  <br />
+  <br />
+  <div class="layui-form">
+    <div class="layui-form-item">
+      <label class="layui-form-label">标题搜索</label>
+      <div class="layui-inline">
+        <input type="text" name="name" id="name" lay-verify="required" placeholder="请输入搜索内容" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-inline">
+        <button id="submit" class="layui-btn layui-btn-normal">搜索</button>
+      </div>
+    </div>
+  </div>
+    <table id = "table" class="layui-table">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>标题</th>
+            <th>查看数量</th>
+            <th>作者</th>
+            <th>时间</th>
+          </tr> 
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+      </table>
+      <div id="test1"></div>
+  <script>
+
+
+$("#submit").click(function(){
+  layui.use('laypage', function(){
+    var laypage = layui.laypage;
+    var pages_num = searchContent(10,1);
+    //执行一个laypage实例
+    laypage.render({
+      elem:'test1',
+      limit:10,
+      count: pages_num,
+      jump: function(obj, first){
+        //首次不执行
+        if(!first){
+          searchContent(obj.limit,obj.curr);
+        }
+      }
+    });
+  });
+});
+
+  layui.use('laypage', function(){
+    var laypage = layui.laypage;
+    var pages_num = searchContent(10,1);
+    //执行一个laypage实例
+    laypage.render({
+      elem:'test1',
+      limit:10,
+      count: pages_num,
+      jump: function(obj, first){
+        //首次不执行
+        if(!first){
+          searchContent(obj.limit,obj.curr);
+        }
+      }
+    });
+  });
+  var page_num = 10;
+
+  function searchContent(pagtor,page) {
+    var name = $("#name").val();
+    var page_num = doAjax(pagtor,page,name);
+    return page_num;
+    //console.log(name);
+  }
+
+
+
+  function doAjax(pagtor,page,name){
+    $.ajax({
+      async:false,
+      url:"/search/api/search/?pagtor="+pagtor+"&page="+page,
+      type:"POST",
+      data:{'name':name},
+      dataType:"text",
+      success:function(result){
+        var data = $.parseJSON(result);
+        if (data["ret_cd"] == 200){
+          // 先清空
+          $("#tbody").html("");
+          // 数量
+          page_num = data["pages_num"];
+          var appendHtml = "";
+          var list = data["successResult"];
+          for(var i = 0;i < list.length;i++){
+            var info = list[i];
+            var trData = "<tr>"+
+              "<td>"+(i+1)+"</td>"+
+              "<td> <a target=\"_blank\" href = \""+info["url"]+"\">"+info["article_title"]+"</a></td>"+
+              "<td>"+info["views_count"]+"</td>"+
+              "<td>"+info["article_author"]+"</td>"+
+              "<td>"+info["time"]+"</td>"+
+              "</tr>";
+              appendHtml += trData;
+            }
+          $("#tbody").html(appendHtml);
+        }
+      }
+    });
+    return page_num;
+  }
+</script>
+</body>
+</html>
